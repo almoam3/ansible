@@ -19,6 +19,26 @@
            - httpd
            - php
         state: latest
+ 
+  - name: copying index.html file
+    tags: apache
+    copy:
+      src: defaults_site.yml
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: apply firewall rule on http
+    firewalld: 
+            port: 80/tcp
+            permanent: true
+            state: enabled 
+
+  - name: start http service
+    service:
+      name: httpd
+      state: started  
 
 - hosts: db_server
   become: true
